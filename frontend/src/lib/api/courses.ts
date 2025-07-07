@@ -1,11 +1,29 @@
 import api from '../api';
 
+// Helper function to convert Prisma Decimal to number
+const convertDecimalToNumber = (value: any): number => {
+  if (value === null || value === undefined) return 0;
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string') return parseFloat(value) || 0;
+  // Handle Prisma Decimal object
+  if (value && typeof value === 'object' && 'toNumber' in value) {
+    return value.toNumber();
+  }
+  return 0;
+};
+
+// Helper function to process course data
+const processCourseData = (course: any): Course => ({
+  ...course,
+  price: convertDecimalToNumber(course.price),
+});
+
 export interface Course {
   id: string;
   title: string;
   description?: string;
   thumbnail?: string;
-  price: number;
+  price: number; // This will be converted from Prisma Decimal
   isPublished: boolean;
   organizationId: string;
   createdById: string;
@@ -59,6 +77,7 @@ export interface CreateCourseData {
   thumbnail?: string;
   price: number;
   isPublished?: boolean;
+  organizationId: string;
   createdById: string;
 }
 
@@ -84,31 +103,31 @@ export const coursesApi = {
   getAll: async (organizationId?: string): Promise<Course[]> => {
     const params = organizationId ? { organizationId } : {};
     const response = await api.get('/courses', { params });
-    return response.data;
+    return response.data.map(processCourseData);
   },
 
   // Get published courses only
   getPublished: async (): Promise<Course[]> => {
     const response = await api.get('/courses/published');
-    return response.data;
+    return response.data.map(processCourseData);
   },
 
   // Get course by ID
   getById: async (id: string): Promise<Course> => {
     const response = await api.get(`/courses/${id}`);
-    return response.data;
+    return processCourseData(response.data);
   },
 
   // Create new course
   create: async (data: CreateCourseData): Promise<Course> => {
     const response = await api.post('/courses', data);
-    return response.data;
+    return processCourseData(response.data);
   },
 
   // Update course
   update: async (id: string, data: Partial<CreateCourseData>): Promise<Course> => {
     const response = await api.put(`/courses/${id}`, data);
-    return response.data;
+    return processCourseData(response.data);
   },
 
   // Delete course

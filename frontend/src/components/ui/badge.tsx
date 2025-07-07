@@ -3,17 +3,20 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 hover:scale-105",
   {
     variants: {
       variant: {
         default:
-          "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
+          "border-transparent bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white shadow-sm hover:shadow-md",
         secondary:
-          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "border-transparent bg-gradient-to-r from-[var(--accent)] to-purple-600 text-white shadow-sm hover:shadow-md",
         destructive:
-          "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        outline: "text-foreground",
+          "border-transparent bg-gradient-to-r from-red-500 to-red-600 text-white shadow-sm hover:shadow-md",
+        outline: "border-2 border-[var(--border)] bg-white text-[var(--foreground)] hover:bg-[var(--primary-light)] hover:border-[var(--primary)] hover:text-[var(--primary)] shadow-sm hover:shadow-md",
+        success: "border-transparent bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-sm hover:shadow-md",
+        warning: "border-transparent bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-sm hover:shadow-md",
+        info: "border-transparent bg-gradient-to-r from-blue-500 to-cyan-600 text-white shadow-sm hover:shadow-md",
       },
     },
     defaultVariants: {

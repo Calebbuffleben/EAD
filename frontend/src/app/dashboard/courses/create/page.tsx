@@ -50,11 +50,11 @@ export default function CreateCoursePage() {
       setLoading(true);
       setError(null);
       
-      // For now, we'll use a placeholder createdById
-      // In a real app, this would come from the authenticated user
+      // Use the real IDs from our seed data
       const courseData = {
         ...formData,
-        createdById: 'placeholder-user-id', // Replace with actual user ID
+        organizationId: 'cmctip5t90000uz0vb8f43ucy', // Academy of Learning
+        createdById: 'cmctip5ub0002uz0v9ef8hnsy', // John Doe (teacher)
       };
 
       const newCourse = await coursesApi.create(courseData);
