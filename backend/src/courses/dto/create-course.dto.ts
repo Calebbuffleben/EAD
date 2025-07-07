@@ -1,4 +1,10 @@
-import { IsString, IsOptional, IsNumber, IsBoolean, IsUrl } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsNumber,
+  IsBoolean,
+  IsUrl,
+} from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class CreateCourseDto {
@@ -22,5 +28,8 @@ export class CreateCourseDto {
   isPublished?: boolean;
 
   @IsString()
+  organizationId: string;
+
+  @IsString()
   createdById: string;
-} 
+}

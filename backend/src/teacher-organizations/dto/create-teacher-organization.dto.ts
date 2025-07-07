@@ -15,4 +15,4 @@ export class CreateTeacherOrganizationDto {
   @IsOptional()
   @IsString()
   logo?: string;
-} 
+}

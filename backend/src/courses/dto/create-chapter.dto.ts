@@ -16,4 +16,4 @@ export class CreateChapterDto {
   @IsOptional()
   @IsBoolean()
   isPublished?: boolean;
-} 
+}

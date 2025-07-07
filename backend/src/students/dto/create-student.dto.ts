@@ -13,4 +13,4 @@ export class CreateStudentDto {
   @IsOptional()
   @IsUrl()
   avatar?: string;
-} 
+}

@@ -1,4 +1,10 @@
-import { IsString, IsOptional, IsNumber, IsBoolean, IsUrl } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsNumber,
+  IsBoolean,
+  IsUrl,
+} from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class CreateLessonDto {
@@ -15,7 +21,7 @@ export class CreateLessonDto {
 
   @IsOptional()
   @IsNumber()
-  @Transform(({ value }) => value ? parseInt(value) : undefined)
+  @Transform(({ value }) => (value ? parseInt(value) : undefined))
   duration?: number;
 
   @IsNumber()
@@ -25,4 +31,4 @@ export class CreateLessonDto {
   @IsOptional()
   @IsBoolean()
   isPublished?: boolean;
-} 
+}

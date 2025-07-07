@@ -4,4 +4,4 @@ import { TeacherOrganizationsController } from './teacher-organizations.controll
 @Module({
   controllers: [TeacherOrganizationsController],
 })
-export class TeacherOrganizationsModule {} 
+export class TeacherOrganizationsModule {}

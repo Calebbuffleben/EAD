@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -13,7 +22,7 @@ export class CoursesController {
   @Get()
   async findAll(@Query('organizationId') organizationId?: string) {
     const where = organizationId ? { organizationId } : {};
-    
+
     return this.prisma.course.findMany({
       where,
       include: {
@@ -183,7 +192,7 @@ export class CoursesController {
     @Param('chapterId') chapterId: string,
   ) {
     return this.prisma.chapter.findFirst({
-      where: { 
+      where: {
         id: chapterId,
         courseId,
       },
@@ -215,7 +224,7 @@ export class CoursesController {
     @Body() updateDto: Partial<CreateChapterDto>,
   ) {
     return this.prisma.chapter.update({
-      where: { 
+      where: {
         id: chapterId,
         courseId,
       },
@@ -229,7 +238,7 @@ export class CoursesController {
     @Param('chapterId') chapterId: string,
   ) {
     return this.prisma.chapter.delete({
-      where: { 
+      where: {
         id: chapterId,
         courseId,
       },
@@ -243,7 +252,7 @@ export class CoursesController {
     @Param('chapterId') chapterId: string,
   ) {
     return this.prisma.lesson.findMany({
-      where: { 
+      where: {
         chapterId,
         chapter: { courseId },
       },
@@ -258,7 +267,7 @@ export class CoursesController {
     @Param('lessonId') lessonId: string,
   ) {
     return this.prisma.lesson.findFirst({
-      where: { 
+      where: {
         id: lessonId,
         chapterId,
         chapter: { courseId },
@@ -288,7 +297,7 @@ export class CoursesController {
     @Body() updateDto: Partial<CreateLessonDto>,
   ) {
     return this.prisma.lesson.update({
-      where: { 
+      where: {
         id: lessonId,
         chapterId,
       },
@@ -303,7 +312,7 @@ export class CoursesController {
     @Param('lessonId') lessonId: string,
   ) {
     return this.prisma.lesson.delete({
-      where: { 
+      where: {
         id: lessonId,
         chapterId,
       },
@@ -355,4 +364,4 @@ export class CoursesController {
       },
     });
   }
-} 
+}

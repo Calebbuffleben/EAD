@@ -14,4 +14,4 @@ export class CreateTeacherTeamMemberDto {
   @IsOptional()
   @IsEnum(TeacherRole)
   role?: TeacherRole;
-} 
+}

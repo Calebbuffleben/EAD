@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTeacherOrganizationDto } from './dto/create-teacher-organization.dto';
 import { UpdateTeacherOrganizationDto } from './dto/update-teacher-organization.dto';
@@ -69,7 +77,10 @@ export class TeacherOrganizationsController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateDto: UpdateTeacherOrganizationDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateDto: UpdateTeacherOrganizationDto,
+  ) {
     return this.prisma.teacherOrganization.update({
       where: { id },
       data: updateDto,
@@ -110,7 +121,7 @@ export class TeacherOrganizationsController {
     @Param('memberId') memberId: string,
   ) {
     return this.prisma.teacherTeamMember.findFirst({
-      where: { 
+      where: {
         id: memberId,
         organizationId,
       },
@@ -166,7 +177,7 @@ export class TeacherOrganizationsController {
     @Body() updateDto: UpdateTeacherTeamMemberDto,
   ) {
     return this.prisma.teacherTeamMember.update({
-      where: { 
+      where: {
         id: memberId,
         organizationId,
       },
@@ -188,10 +199,10 @@ export class TeacherOrganizationsController {
     @Param('memberId') memberId: string,
   ) {
     return this.prisma.teacherTeamMember.delete({
-      where: { 
+      where: {
         id: memberId,
         organizationId,
       },
     });
   }
-} 
+}
