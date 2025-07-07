@@ -1,0 +1,181 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Teacher Organization (can have multiple team members)
+model TeacherOrganization {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  website     String?
+  logo        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  teamMembers TeacherTeamMember[]
+  courses     Course[]
+
+  @@map("teacher_organizations")
+}
+
+// Teacher Team Members (users who can manage courses for the organization)
+model TeacherTeamMember {
+  id                   String   @id @default(cuid())
+  organizationId       String
+  clerkUserId          String   @unique // Clerk user ID
+  email                String
+  name                 String
+  role                 TeacherRole @default(TEACHER)
+  isActive             Boolean  @default(true)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  // Relations
+  organization TeacherOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  courses      Course[]            @relation("CourseCreator")
+
+  @@unique([organizationId, clerkUserId])
+  @@map("teacher_team_members")
+}
+
+// Students (individual users who enroll in courses)
+model Student {
+  id          String   @id @default(cuid())
+  clerkUserId String   @unique // Clerk user ID
+  email       String
+  name        String
+  avatar      String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  purchases   CoursePurchase[]
+  progress    LessonProgress[]
+
+  @@map("students")
+}
+
+// Courses
+model Course {
+  id                String   @id @default(cuid())
+  title             String
+  description       String?
+  thumbnail         String?
+  price             Decimal  @default(0)
+  isPublished       Boolean  @default(false)
+  organizationId    String
+  createdById       String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  organization      TeacherOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy         TeacherTeamMember   @relation("CourseCreator", fields: [createdById], references: [id])
+  chapters          Chapter[]
+  purchases         CoursePurchase[]
+
+  @@map("courses")
+}
+
+// Chapters (organize lessons within courses)
+model Chapter {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  courseId    String
+  order       Int
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  course      Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons     Lesson[]
+
+  @@map("chapters")
+}
+
+// Lessons
+model Lesson {
+  id          String   @id @default(cuid())
+  title       String
+  content     String?
+  videoUrl    String?
+  duration    Int?     // in minutes
+  chapterId   String
+  order       Int
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  chapter     Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  progress    LessonProgress[]
+
+  @@map("lessons")
+}
+
+// Course purchases (students buy courses)
+model CoursePurchase {
+  id         String    @id @default(cuid())
+  studentId  String
+  courseId   String
+  purchasedAt DateTime  @default(now())
+  amount     Decimal
+  isActive   Boolean   @default(true)
+
+  // Relations
+  student    Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course     Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, courseId])
+  @@map("course_purchases")
+}
+
+// Student progress tracking for lessons
+model LessonProgress {
+  id         String   @id @default(cuid())
+  studentId  String
+  lessonId   String
+  isCompleted Boolean  @default(false)
+  watchedAt  DateTime?
+  completedAt DateTime?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  student    Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  lesson     Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, lessonId])
+  @@map("lesson_progress")
+}
+
+// Teacher roles within an organization
+enum TeacherRole {
+  OWNER      // Can manage organization and all courses
+  ADMIN      // Can manage courses and team members
+  TEACHER    // Can create and manage courses
+  ASSISTANT  // Can view and assist with courses
+}
+
+// Clerk webhook events (for future integration)
+model ClerkWebhook {
+  id        String   @id @default(cuid())
+  eventType String
+  payload   Json
+  processed Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("clerk_webhooks")
+}
