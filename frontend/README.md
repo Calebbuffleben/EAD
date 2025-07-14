@@ -119,9 +119,4 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 2. Use the `cn()` utility for class merging
 3. Follow the existing component patterns
 
-### Styling
-
-- Use Tailwind CSS classes
-- Use the `cn()` utility for conditional classes
-- Follow the design system patterns
 
