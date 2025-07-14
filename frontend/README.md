@@ -125,13 +125,3 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 - Use the `cn()` utility for conditional classes
 - Follow the design system patterns
 
-## Deployment
-
-The application can be deployed to Vercel, Netlify, or any other Next.js-compatible platform.
-
-## Contributing
-
-1. Follow the existing code patterns
-2. Use TypeScript for type safety
-3. Write meaningful commit messages
-4. Test your changes thoroughly
