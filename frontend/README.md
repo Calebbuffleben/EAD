@@ -105,18 +105,5 @@ CLERK_SECRET_KEY=your_clerk_secret_key
 NEXT_PUBLIC_API_URL=http://localhost:3001
 ```
 
-## Development
-
-### Adding New Pages
-
-1. Create a new folder in `src/app/`
-2. Add a `page.tsx` file
-3. Export a default React component
-
-### Adding New Components
-
-1. Create a new file in `src/components/`
-2. Use the `cn()` utility for class merging
-3. Follow the existing component patterns
 
 
